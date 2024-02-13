@@ -51,21 +51,21 @@
      <div class="services">
         <div class="row">
             <div class="box">
-                <i class="bi bi-person"></i><!--settings img-->
+                <i class="bi bi-gear"></i>
                 <div>
                     <h1>Free Shipping</h1>
                     <p>Shop stress free! Enjoy your online shopping experience even sweeter. </p>
                 </div>
             </div>
             <div class="box">
-                <i class="bi bi-person"></i><!--dollers img-->
+                <i class="bi bi-cash"></i>
                 <div>
                     <h1>Money Back & Guarantee</h1>
                     <p>Shop worry free with our Money Back Guarantee. We stand by our products ,if you're not satisfied, we'll refund your purchase.</p>
                 </div>
             </div>
             <div class="box">
-                <i class="bi bi-person"></i><!--delivery img-->
+                <i class="bi bi-truck"></i>
                 <div>
                     <h1>Online Suppoet 24/7</h1>
                     <p>Shop with confidence! Our 24/7 online support is here to assist you anytime. We're your round the clock shopping companions.</p>

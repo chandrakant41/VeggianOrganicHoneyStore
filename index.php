@@ -71,7 +71,7 @@
      <div class="container-fluid">
         <div class="hero-slider">
             <div class="slider-item">
-                <img src="img/slider1.png"> <!--hero slid img 1-->
+                <img src="img/slider1.png"> 
                 <div class="slider-caption">
                     <span>Test The Quality</span>
                     <h1>Organic Premium <br>Honey</h1>
@@ -80,7 +80,7 @@
                 </div>
             </div>
             <div class="slider-item">
-                <img src="img/hero-slider2.png"> <!--hero slid img 2-->
+                <img src="img/hero-slider2.png"> 
                 <div class="slider-caption">
                     <span>Test The Quality</span>
                     <h1>Organic Premium <br>Honey</h1>
@@ -98,21 +98,21 @@
      <div class="services">
         <div class="row">
             <div class="box">
-                <h1><i class="bi bi-gear-fill"></i></h1><!--settings img-->
+                <h1><i class="bi bi-gear-fill"></i></h1>
                 <div>
                     <h1>Free Shipping</h1>
                     <p>Shop More,Pay Less - Free Shipping Today, Every Day,Your Way.Unbeatable Deails Await. </p>
                 </div>
             </div>
             <div class="box">
-                <h1><i class="bi bi-cash-coin"></i></h1><!--dollers img-->
+                <h1><i class="bi bi-cash-coin"></i></h1>
                 <div>
                     <h1>Money Back & Guarantee</h1>
                     <p>Shop Risk Free With Our 100% Money Back Guarantee - Your Satisfaction, Our Commitment, Your Peace Of Mind.</p>
                 </div>
             </div>
             <div class="box">
-                <h1><i class="bi bi-truck"></i></h1><!--delivery img-->
+                <h1><i class="bi bi-truck"></i></h1>
                 <div>
                     <h1>Online Suppoet 24/7</h1>
                     <p>Unwavering Assistance Anytime, Anywhere. 24/7 Online Support, Your Solutions, Around the Clock. We're Here Always.</p>
@@ -207,14 +207,6 @@
     <script type="text/javascript">
         <?php include 'script2.js' ?>
     </script>
-    <!--<script type="text/javascript">
-        $('.hero-slider').slick({
-            dots: true,
-            infinite: true,
-            speed: 300,
-            slidesToShow: 1,
-            adaptiveHeight: true
-        });
-    </script>-->
+   
 </body>
 </html>

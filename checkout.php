@@ -16,7 +16,7 @@ if (isset($_POST['logout'])) {
 }
 
 if (isset($_POST['order-btn'])) {
-    // ... (Your existing order processing code)
+   
     $name = mysqli_real_escape_string($conn, $_POST['name']);
     $email = mysqli_real_escape_string($conn, $_POST['email']);
     $number = mysqli_real_escape_string($conn, $_POST['number']);
@@ -25,7 +25,7 @@ if (isset($_POST['order-btn'])) {
 
     $placed_on = date('d-M-Y');
     $cart_total = 0;
-    $cart_product = array(); // Initialize an empty array
+    $cart_product = array(); 
 
     $cart_query = mysqli_query($conn, "SELECT * FROM `cart` WHERE user_id = '$user_id'") or die('query failed');
 
@@ -39,12 +39,12 @@ if (isset($_POST['order-btn'])) {
     
     $total_products = implode(',', $cart_product);
 
-    // Correct the SQL statement by using backticks around column names and proper values
+    
     $sql = "INSERT INTO `order` (`user_id`, `name`, `number`, `email`, `method`, `address`, `total_products`, `total_price`, `placed_on`)
             VALUES ('$user_id', '$name', '$number', '$email', '$method', '$address', '$total_products', '$cart_total', '$placed_on')";
     mysqli_query($conn, $sql);
 
-    // Delete cart items for the user
+  
     mysqli_query($conn, "DELETE FROM `cart` WHERE user_id = '$user_id'");
 
 
@@ -161,7 +161,7 @@ if (isset($_POST['order-btn'])) {
                 <label>country</label>
                 <input type="text" name="country" placeholder="e.g india">
             </div>
-    <!-- Other fields... -->
+   
     <div class="input-field">
         <label>pincode</label>
         <input type="text" name="pincode" id="pincode" placeholder="e.g 415103">
@@ -185,7 +185,7 @@ function validateForm() {
 
     var isValid = true;
 
-    // Validate Name (Should not be empty)
+    //  Name (Should not be empty)
     if (name === '') {
         document.getElementById('nameError').innerHTML = 'Please enter your name.';
         isValid = false;
@@ -193,7 +193,7 @@ function validateForm() {
         document.getElementById('nameError').innerHTML = '';
     }
 
-    // Validate Number (Should be a valid number)
+    //  Number (Should be a valid number)
     if (isNaN(number)) {
         document.getElementById('numberError').innerHTML = 'Please enter a valid number.';
         isValid = false;
@@ -201,7 +201,7 @@ function validateForm() {
         document.getElementById('numberError').innerHTML = '';
     }
 
-    // Validate Email (Basic email format check)
+    //  Email (Basic email format check)
     var emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
     if (!emailPattern.test(email)) {
         document.getElementById('emailError').innerHTML = 'Please enter a valid email address.';
@@ -210,7 +210,7 @@ function validateForm() {
         document.getElementById('emailError').innerHTML = '';
     }
 
-    // Validate Payment Method (Should not be the default option)
+    //  Payment Method (Should not be the default option)
     if (method === 'select payment method') {
         document.getElementById('methodError').innerHTML = 'Please select a payment method.';
         isValid = false;
@@ -218,7 +218,7 @@ function validateForm() {
         document.getElementById('methodError').innerHTML = '';
     }
 
-    // Validate Pincode (Should be a valid 6-digit number)
+    //  Pincode (Should be a valid 6-digit number)
     var pincodePattern = /^\d{6}$/;
     if (!pincodePattern.test(pincode)) {
         document.getElementById('pincodeError').innerHTML = 'Please enter a valid 6-digit pincode.';

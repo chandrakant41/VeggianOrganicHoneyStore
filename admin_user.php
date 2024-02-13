@@ -13,7 +13,7 @@
         header('location:login.php');
     }
    
-   // delete products from database
+ 
    if (isset($_GET['delete'])) {
     $delete_id = $_GET['delete'];
 

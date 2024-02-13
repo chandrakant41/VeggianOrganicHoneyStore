@@ -40,7 +40,7 @@
             }
         }
     }
-   // delete products from database
+ 
    if (isset($_GET['delete'])) {
     $delete_id = $_GET['delete'];
     $select_delete_image = mysqli_query($conn, "SELECT image FROM `products` WHERE id ='$delete_id'") or die('query failed');
@@ -55,7 +55,7 @@
     header('location:admin_product.php');
    }
 
-   // update product
+  
 if (isset($_POST['update_product'])) {
     $update_id = $_POST['update_id'];
     $update_name = mysqli_real_escape_string($conn, $_POST['update_name']);
@@ -84,7 +84,7 @@ if (isset($_POST['update_product'])) {
     header('location:admin_product.php');
 }
 
-// hide update form
+
 function hideUpdateForm() {
     echo "<script>document.getElementById('updateForm').style.display='none'</script>";
 }

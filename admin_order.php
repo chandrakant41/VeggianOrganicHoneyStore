@@ -13,7 +13,7 @@
         header('location:login.php');
     }
    
-   // delete products from database
+ 
    if (isset($_GET['delete'])) {
     $delete_id = $_GET['delete'];
 
@@ -22,7 +22,7 @@
     header('location:admin_order.php');
    }
 
-   //uupdating payment status
+  
    if (isset($_POST['update_payment'])) {
     $order_id = $_POST['order_id'];
     $order_payment = $_POST['update_payment'];

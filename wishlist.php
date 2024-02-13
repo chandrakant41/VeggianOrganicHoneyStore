@@ -57,7 +57,7 @@
     
         header('location:wishlist.php');
        }
-    //delete product from wishlist
+    //delete all product from wishlist
     if (isset($_GET['delete_all'])) {
         
         mysqli_query($conn, "DELETE FROM `wishlist` WHERE user_id = '$user_id'") or die('query failed');
