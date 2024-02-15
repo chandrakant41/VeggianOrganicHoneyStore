@@ -71,7 +71,7 @@
             <a href="index.php">home</a><span>/ about us</span>
         </div>
     </div> 
-    <div class="line"></div>
+    <div class="line3"></div>
      <!--------------------- shop page--------------------------------------->
     <section class="shop">
         <h1 class="title">shop best sellers</h1>

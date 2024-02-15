@@ -99,6 +99,7 @@ function generateOrderReport($orderDetails) {
             ?>
         </div>    
     </div>
+    <div class="line2"></div>
     <?php include 'footer.php'?>
 
     <?php
