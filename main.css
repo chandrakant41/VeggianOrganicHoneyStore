@@ -522,7 +522,7 @@ header .icons i:hover{
 	margin-top: 2rem;
 	margin-bottom: -5rem;
 }
-/*-----------   Shop   ------------------------*/
+/*----------- --------  Shop   ------------------------*/
 .popular-brands{
 	position: relative;
 	padding: 4%;
@@ -620,7 +620,33 @@ header .icons i:hover{
 	font-weight: bold;
 	font-size: 1.5rem;
 }
-/* home shop ends here */
+.search-container {
+    display: flex;
+    align-items: center;
+}
+
+.search-container form {
+    display: flex;
+    flex: 1;
+}
+
+.search-container input[type="text"],
+.search-container select {
+    flex: 1;
+    margin-right: 5px; 
+}
+
+.search-container button {
+    flex-shrink: 0; 
+	flex: 0;
+    margin-right: 5px;
+	background-color:gainsboro;
+}
+.search-container button:hover{
+	background-color: #f7b90f;
+}
+
+/*------------------- home shop ends here -------------------------*/
 .newslatter{
 	position: relative;
 	text-align: center;
@@ -1012,6 +1038,7 @@ footer .bottom-footer{
 	text-transform: uppercase;
 	color: var(--orange);
 }
+
 .address .box i{
 	font-size: 1.5rem;
 	margin-right: 1rem;
@@ -1151,7 +1178,7 @@ footer .bottom-footer{
 	box-shadow: var(--box-shadow);
 	margin: 1rem 1rem;
 	padding: 1rem 2rem;
-	/* align-items: center; */
+	
 	text-align: left;
 	box-sizing: border-box;
 	overflow: hidden;
