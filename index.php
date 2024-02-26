@@ -56,13 +56,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>veggen - home page</title>
-    <!---------------- bootstrap icon link  --------------------->
+   
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
-    <!---------------- bootstrap css link   --------------------->
-
-    <!---------------- slick slider link    --------------------->
+   
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.css">
-    <!---------------- defualt css link     --------------------->
+  
     <link rel="stylesheet" href="main.css">
 </head>
 <body>

@@ -51,9 +51,9 @@ function generateOrderReport($orderDetails) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>veggen - home page</title>
-    <!-- Bootstrap icon link -->
+   
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
-    <!-- Default CSS link -->
+   
     <link rel="stylesheet" href="main.css">
 </head>
 <body>
@@ -85,7 +85,6 @@ function generateOrderReport($orderDetails) {
                         <p>total price : <span><?php echo $fetch_orders['total_price']; ?></p>
                         <p>payment status: <span><?php echo $fetch_orders['payment_status']; ?></span></p>
                         
-                        <!-- Generate Report Button -->
                         <form method="post">
                             <input type="hidden" name="order_id" value="<?php echo $fetch_orders['id']; ?>">
                             <button type="submit" name="generate_report" class="btn">Generate Report</button>
