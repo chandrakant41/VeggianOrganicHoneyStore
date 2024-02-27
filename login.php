@@ -10,7 +10,7 @@
 		$filter_password = filter_var($_POST['password'], FILTER_SANITIZE_STRING);
 		$password = mysqli_real_escape_string($conn, $filter_password);
 
-		$select_user = mysqli_query($conn, "SELECT * FROM `users` WHERE email = '$email'") or die('query failed');
+		$select_user = mysqli_query($conn, "SELECT * FROM `users` WHERE email = '$email' and password ='$password'") or die('query failed');
 
 		if (mysqli_num_rows($select_user)>0) {
 			$row = mysqli_fetch_assoc($select_user);
@@ -24,10 +24,12 @@
                 $_SESSION['user_email'] = $row['email'];
                 $_SESSION['user_id'] = $row['id'];
                 header('location:index.php'); 
-            }else {
-                $message[] = 'incorrect email or password';
             }
 		}
+			else {
+                $message[] = 'incorrect email or password';
+            }
+		
 	}
 ?>
 <!DOCTYPE html>
@@ -46,6 +48,7 @@
     <section class="form-container">
 		<?php
 			if (isset($message)) {
+				
 				foreach ($message as $message){
 					echo '
 						<div class="message">
@@ -55,12 +58,13 @@
 					';
 				}
 			}
+			
 		?>
     	<form method="post">
     		<h1>login now</h1>
             <div class="input-field">
                 <lable>Enter your email</lable><br>
-                <input type="email" name="email" placeholder="enter your email" required>
+                <input type="email" name="email" placeholder="enter your email" autocomplete="off" required>
             </div>
             <div class="input-field">
                 <lable>Enter your password</lable><br>
@@ -70,5 +74,6 @@
     		<p>do not have an account ? <a href="register.php">register now</a></p>
     	</form>
     </section>
+	
 </body>
 </html>

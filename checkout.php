@@ -25,7 +25,7 @@ if (isset($_POST['order-btn'])) {
 
     $placed_on = date('d-M-Y');
     $cart_total = 0;
-    $cart_product = array(); 
+    $cart_product = array(); // Initialize an empty array
 
     $cart_query = mysqli_query($conn, "SELECT * FROM `cart` WHERE user_id = '$user_id'") or die('query failed');
 
@@ -44,11 +44,54 @@ if (isset($_POST['order-btn'])) {
             VALUES ('$user_id', '$name', '$number', '$email', '$method', '$address', '$total_products', '$cart_total', '$placed_on')";
     mysqli_query($conn, $sql);
 
-  
+    // Delete cart items for the user
     mysqli_query($conn, "DELETE FROM `cart` WHERE user_id = '$user_id'");
 
+    // Include PHPMailer autoloader
+    require 'vendor/autoload.php';
 
-    $message[] = 'Order placed successfully';
+    // Create a new PHPMailer instance
+    $mail = new PHPMailer\PHPMailer\PHPMailer();
+
+    // SMTP configuration
+    $mail->isSMTP();
+    $mail->Host = 'smtp.gmail.com';
+    $mail->SMTPAuth = true;
+    $mail->Username = 'veggianorganichoneystore@gmail.com'; 
+    $mail->Password = 'ehkp xyqi ctka vwin'; 
+    $mail->SMTPSecure = 'tls'; // Enable TLS encryption
+    $mail->Port = 587; // TCP port to connect to
+
+  
+    $mail->setFrom('veggianorganichoneystore@gmail.com', 'Veggin Organic Honey Store');
+    $mail->addAddress($email); 
+
+  // Email content
+$mail->isHTML(true);
+$mail->Subject = 'Your Order Confirmation';
+
+
+$body = '<p>Dear ' . $name . ',</p>';
+$body .= '<p>Thank you for placing your order with us. Below are the details of your order:</p>';
+$body .= '<ul>';
+foreach ($cart_product as $product) {
+    $body .= '<li>' . $product . '</li>';
+    $body .= '<li>Total Price: Rs.' . $cart_total . '</li>';
+}
+$body .= '</ul>';
+$body .= '<p>We hope you enjoy your purchase. Feel free to contact us if you have any questions or concerns.</p>';
+$body .= '<p>Thank you for shopping with us!</p>';
+$body .= '<p>Best Regards,<br>Veggin Organic Honey Store</p>';
+
+$mail->Body = $body;
+
+// Send email
+if ($mail->send()) {
+    $message[] = 'Order placed successfully. An email confirmation has been sent.';
+} else {
+    $message[] = 'Order placed successfully, but failed to send email confirmation. Error: ' . $mail->ErrorInfo;
+}
+   
     header('location: checkout.php');
 }
 ?>
