@@ -14,6 +14,7 @@
     }
     //adding products to database
     if (isset($_POST['add_product'])) {
+        $product_brand_name = mysqli_real_escape_string($conn, $_POST['brand_name']);
         $product_name = mysqli_real_escape_string($conn, $_POST['name']);
         $product_price = mysqli_real_escape_string($conn, $_POST['price']);
         $product_detail = mysqli_real_escape_string($conn, $_POST['detail']);
@@ -21,14 +22,18 @@
         $image_size = $_FILES['image']['size'];
         $image_tmp = $_FILES['image']['tmp_name'];
         $target = 'C:\xampp\htdocs\img' . basename($_FILES['image']['name']);        
-       
+        $product_net_weight = mysqli_real_escape_string($conn, $_POST['net_weight']);
+        $product_stock = mysqli_real_escape_string($conn, $_POST['stock']);
+
+
+
         $select_product_name= mysqli_query($conn,"SELECT name FROM `products` WHERE name='$product_name'")or die('query failed');
 
         if (mysqli_num_rows($select_product_name)>0) {
             $message[]='product name already exist';
         }else{
-            $insert_product = mysqli_query($conn, "INSERT INTO `products`(`name`,`price`,`product_details`,`image`)
-            VALUES('$product_name','$product_price','$product_detail','$image')") or die('query failed');
+            $insert_product = mysqli_query($conn, "INSERT INTO `products`(`brand_name`,`name`,`price`,`product_details`,`image`,`net_weight`,`stock`)
+            VALUES('$product_brand_name','$product_name','$product_price','$product_detail','$image',' $product_net_weight','$product_stock')") or die('query failed');
             if ($insert_product) {
                 if ($image_size > 2000000) {
                     $message[]='image size is to large';
@@ -58,9 +63,12 @@
   
 if (isset($_POST['update_product'])) {
     $update_id = $_POST['update_id'];
+    $update_brand_name = mysqli_real_escape_string($conn, $_POST['update_brand_name']);
     $update_name = mysqli_real_escape_string($conn, $_POST['update_name']);
     $update_price = mysqli_real_escape_string($conn, $_POST['update_price']);
     $update_detail = mysqli_real_escape_string($conn, $_POST['update_detail']);
+    $update_net_weight = mysqli_real_escape_string($conn, $_POST['update_net_weight']);
+    $update_stock = mysqli_real_escape_string($conn, $_POST['update_stock']);
 
     // Check if a new image is uploaded
     if ($_FILES['update_image']['name'] != '') {
@@ -75,10 +83,10 @@ if (isset($_POST['update_product'])) {
         unlink('C:\xampp\htdocs\img' . $fetch_existing_image['image']);
 
         // Update product with new image
-        mysqli_query($conn, "UPDATE `products` SET `name`='$update_name', `price`='$update_price', `product_details`='$update_detail', `image`='$update_image' WHERE id = '$update_id'") or die('query failed');
+        mysqli_query($conn, "UPDATE `products` SET `brand_name`=' $update_brand_name',`name`='$update_name', `price`='$update_price', `product_details`='$update_detail', `image`='$update_image',`net_weight`='$update_net_weight',`stock`='$update_stock' WHERE id = '$update_id'") or die('query failed');
     } else {
         // Update product without changing the image
-        mysqli_query($conn, "UPDATE `products` SET `name`='$update_name', `price`='$update_price', `product_details`='$update_detail' WHERE id = '$update_id'") or die('query failed');
+        mysqli_query($conn, "UPDATE `products` SET `brand_name`=' $update_brand_name', `name`='$update_name', `price`='$update_price', `product_details`='$update_detail',`net_weight`='$update_net_weight',`stock`='$update_stock' WHERE id = '$update_id'") or die('query failed');
     }
 
     header('location:admin_product.php');
@@ -125,6 +133,10 @@ function hideUpdateForm() {
     <section class="add-products form-container">
         <form action="" method="POST" enctype="multipart/form-data">
             <div class="input-field">
+                <label>brand name</label>
+                <input type="text" name="brand_name" required>
+            </div>
+            <div class="input-field">
                 <label>product name</label>
                 <input type="text" name="name" required>
             </div>
@@ -140,6 +152,14 @@ function hideUpdateForm() {
                 <label>product image</label>
                 <input type="file" name="image" accept="image/jpg, image/jpeg, image/png, image/webp" required>
             </div>
+            <div class="input-field">
+                <label>net_weight</label>
+                <input type="text" name="net_weight" required>
+            </div>
+            <div class="input-field">
+                <label>stock</label>
+                <input type="text" name="stock" required>
+            </div>
             <input type="submit" name="add_product" value="add product" class="btn">
         </form>
     </section>
@@ -153,10 +173,12 @@ function hideUpdateForm() {
                     while ($fetch_products = mysqli_fetch_assoc($select_products)) {
              
             ?>
-            <div class="box">
+            <div class="box <?php echo ($fetch_products['stock'] == 0) ? 'out-of-stock' : ''; ?>">
                 <img src="img/<?php echo $fetch_products['image']; ?>">
                 <p>price : Rs<?php echo $fetch_products['price']; ?></p>
+                <h4><?php echo $fetch_products['brand_name']; ?></h4>
                 <h4><?php echo $fetch_products['name']; ?></h4>
+                <p>Net Weight : <?php echo $fetch_products['net_weight']; ?>g</p>
                 <details><?php echo $fetch_products['product_details']; ?></details>
                 <a href="admin_product.php?edit=<?php echo $fetch_products['id']; ?>" class="edit">edit</a>
                 <a href="admin_product.php?delete=<?php echo $fetch_products['id']; ?>" class="delete" onclick="return confirm('want to delete this product');">delete</a>
@@ -185,6 +207,10 @@ function hideUpdateForm() {
     <form action="" method="POST" enctype="multipart/form-data">
         <input type="hidden" name="update_id" value="<?php echo $fetch_edit['id']; ?>">
         <div class="input-field">
+            <label>Brand Name</label>
+            <input type="text" name="update_brand_name" value="<?php echo $fetch_edit['brand_name']; ?>" required>
+        </div>
+        <div class="input-field">
             <label>Product Name</label>
             <input type="text" name="update_name" value="<?php echo $fetch_edit['name']; ?>" required>
         </div>
@@ -201,6 +227,14 @@ function hideUpdateForm() {
             <input type="file" name="update_image" accept="image/jpg, image/jpeg, image/png, image/webp">
         </div>
         <img src="img/<?php echo $fetch_edit['image']; ?>" class="existing-image">
+        <div class="input-field">
+            <label>Net Weight</label>
+            <input type="text" name="update_net_weight" value="<?php echo $fetch_edit['net_weight']; ?>" required>
+        </div>
+        <div class="input-field">
+            <label>Stock</label>
+            <input type="text" name="update_stock" value="<?php echo $fetch_edit['stock']; ?>" required>
+        </div>
         <input type="submit" name="update_product" value="Update" class="btn">
         <input type="button" value="Cancel" class="btn" onclick="hideUpdateForm()">
     </form>

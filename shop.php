@@ -15,7 +15,9 @@ if (isset($_POST['logout'])) {
 // adding product in wishlist
 if (isset($_POST['add_to_wishlist'])) {
     $product_id = $_POST['product_id'];
+    $product_brand_name = $_POST['product_brand_name'];
     $product_name = $_POST['product_name'];
+    $product_net_weight = $_POST['product_net_weight'];
     $product_price = $_POST['product_price'];
     $product_image = $_POST['product_image'];
 
@@ -24,7 +26,7 @@ if (isset($_POST['add_to_wishlist'])) {
     if (mysqli_num_rows($wishlist_number) > 0) {
         $message[] = 'product already exists in wishlist';
     } else {
-        mysqli_query($conn, "INSERT INTO `wishlist`(`user_id`,`pid`,`name`,`price`,`image`) VALUES('$user_id','$product_id','$product_name','$product_price','$product_image')");
+        mysqli_query($conn, "INSERT INTO `wishlist`(`user_id`,`pid`,`brand_name`,`name`,`net_weight`,`price`,`image`) VALUES('$user_id','$product_id','$product_brand_name','$product_name','$product_net_weight','$product_price','$product_image')");
         $message[] = 'product successfully added to your wishlist';
     }
 }
@@ -32,7 +34,9 @@ if (isset($_POST['add_to_wishlist'])) {
 // adding product in cart
 if (isset($_POST['add_to_cart'])) {
     $product_id = $_POST['product_id'];
+    $product_brand_name = $_POST['product_brand_name'];
     $product_name = $_POST['product_name'];
+    $product_net_weight = $_POST['product_net_weight'];
     $product_price = $_POST['product_price'];
     $product_image = $_POST['product_image'];
     $product_quantity = $_POST['product_quantity'];
@@ -41,7 +45,7 @@ if (isset($_POST['add_to_cart'])) {
     if (mysqli_num_rows($cart_number) > 0) {
         $message[] = 'product already exists in cart';
     } else {
-        mysqli_query($conn, "INSERT INTO `cart`(`user_id`,`pid`,`name`,`price`,`quantity`,`image`) VALUES('$user_id','$product_id','$product_name','$product_price','$product_quantity','$product_image')");
+        mysqli_query($conn, "INSERT INTO `cart`(`user_id`,`pid`,`brand_name`,`name`,`net_weight`,`price`,`quantity`,`image`) VALUES('$user_id','$product_id','$product_brand_name','$product_name','$product_net_weight','$product_price','$product_quantity','$product_image')");
         $message[] = 'product successfully added to your cart';
     }
 }
@@ -125,21 +129,34 @@ if (isset($_GET['search'])) {
             if (mysqli_num_rows($select_products) > 0) {
                 while ($fetch_products = mysqli_fetch_assoc($select_products)) {
             ?>
-                    <form method="post" class="box">
-                        <img src="img/<?php echo $fetch_products['image']; ?>">       
-                        <div class="price">Rs<?php echo $fetch_products['price']; ?></div>
-                        <div class="name"><?php echo $fetch_products['name']; ?></div>
-                        <input type="hidden" name="product_id" value="<?php echo $fetch_products['id']; ?>">
-                        <input type="hidden" name="product_name" value="<?php echo $fetch_products['name']; ?>">
-                        <input type="hidden" name="product_price" value="<?php echo $fetch_products['price']; ?>">
-                        <input type="hidden" name="product_quantity" value="1" min="1">
-                        <input type="hidden" name="product_image" value="<?php echo $fetch_products['image']; ?>">
-                        <div class="icon">
-                            <a href="view_page.php?pid=<?php echo $fetch_products['id']; ?>" class="bi bi-eye-fill"></a>
-                            <button type="submit" name="add_to_wishlist" class="bi bi-heart"></button>
-                            <button type="submit" name="add_to_cart" class="bi bi-cart"></button>
-                        </div>
-                    </form>
+                    <!-- Update the product box markup to include the out-of-stock message and apply the 'out-of-stock' class -->
+            <form method="post" class="box <?php echo ($fetch_products['stock'] == 0) ? 'out-of-stock' : ''; ?>">
+                <img src="img/<?php echo $fetch_products['image']; ?>">       
+                <div class="price">Rs<?php echo $fetch_products['price']; ?></div>
+                <div class="brand_name"><h4><?php echo $fetch_products['brand_name'];?></h4></div>
+                <div class="name"><?php echo $fetch_products['name']; ?></div>
+                <div class="net_weight"><h4><?php echo $fetch_products['net_weight'];?>g</h4></div>
+                <input type="hidden" name="product_id" value="<?php echo $fetch_products['id']; ?>">
+                <input type="hidden" name="product_brand_name" value="<?php echo $fetch_products['brand_name'];?>">
+                <input type="hidden" name="product_name" value="<?php echo $fetch_products['name']; ?>">
+                <input type="hidden" name="product_net_weight" value="<?php echo $fetch_products['net_weight'];?>">
+                <input type="hidden" name="product_price" value="<?php echo $fetch_products['price']; ?>">
+                <input type="hidden" name="product_quantity" value="1" min="1">
+                <input type="hidden" name="product_image" value="<?php echo $fetch_products['image']; ?>">
+                <?php if ($fetch_products['stock'] == 0): ?>
+                    <div class="out-of-stock-message">Out of Stock</div> <!-- Display out-of-stock message -->
+                <?php endif; ?>
+                <div class="icon">
+                <a href="view_page.php?pid=<?php echo $fetch_products['id']; ?>" class="bi bi-eye-fill"></a>
+                <?php if ($fetch_products['stock'] > 0): ?>
+                    <button type="submit" name="add_to_wishlist" class="bi bi-heart"></button>
+                    <button type="submit" name="add_to_cart" class="bi bi-cart"></button>
+                <?php else: ?>
+                    <button type="submit" name="add_to_wishlist" class="bi bi-heart" disabled></button>
+                    <button type="submit" name="add_to_cart" class="bi bi-cart" disabled></button>
+                <?php endif; ?>
+                </div>
+            </form>
             <?php
                 }
             } else {

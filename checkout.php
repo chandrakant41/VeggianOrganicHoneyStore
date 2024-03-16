@@ -31,7 +31,7 @@ if (isset($_POST['order-btn'])) {
 
     if (mysqli_num_rows($cart_query) > 0) {
         while ($cart_item = mysqli_fetch_assoc($cart_query)) {
-            $cart_product[] = $cart_item['name'] . '(' . $cart_item['quantity'] . ')';
+            $cart_product[] = $cart_item['brand_name'] . ' ' . $cart_item['name'] . '(' . $cart_item['net_weight'] . 'g)' . '(' . $cart_item['quantity'] . ')';
             $sub_total = ($cart_item['price'] * $cart_item['quantity']);
             $cart_total += $sub_total;
         }
@@ -44,7 +44,7 @@ if (isset($_POST['order-btn'])) {
             VALUES ('$user_id', '$name', '$number', '$email', '$method', '$address', '$total_products', '$cart_total', '$placed_on')";
     mysqli_query($conn, $sql);
 
-    // Delete cart items for the user
+    
     mysqli_query($conn, "DELETE FROM `cart` WHERE user_id = '$user_id'");
 
     // Include PHPMailer autoloader
@@ -145,13 +145,13 @@ if ($mail->send()) {
                 $grand_total = $total += $total_price;
             ?>
         <div class="box">
-            <img src="img/<?php echo $fetch_cart['image']; ?>">
-            <span>
-                <?php
-                echo $fetch_cart['name'] . ' (' . $fetch_cart['quantity'] . ')';
-                ?>
-            </span>
-        </div>
+    <img src="img/<?php echo $fetch_cart['image']; ?>">
+    <span>
+        <?php
+        echo $fetch_cart['brand_name'] . ' ' . $fetch_cart['name'] . ' (' . $fetch_cart['net_weight'] . 'g)' . ' (' . $fetch_cart['quantity'] . ')';
+        ?>
+    </span>
+</div>
         <?php
             }
         }

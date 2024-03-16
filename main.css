@@ -522,6 +522,44 @@ header .icons i:hover{
 	margin-top: 2rem;
 	margin-bottom: -5rem;
 }
+/*-------------------- Style for the card (out of stock) ----------------*/
+.card {
+    position: relative;
+    width: 300px;
+    margin: 1rem;
+    filter: none; 
+}
+.card.out-of-stock {
+    filter: blur(1px);
+}	
+.card.out-of-stock img {
+    filter: blur(1px); 
+}
+
+.icon button {
+    border: none;
+    cursor: pointer;
+    background-color: transparent;
+}
+
+.icon button[disabled] {
+    cursor: not-allowed; 
+    color: #999; 
+}
+.card.out-of-stock::before {
+    content: "Out of Stock";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(10, 10, 10, 0.99); 
+    color: #fff; 
+    padding: 10px;
+    border-radius: 5px;
+    text-align: center;
+    font-weight: bold;
+    z-index: 10;
+}
 /*----------- --------  Shop   ------------------------*/
 .popular-brands{
 	position: relative;
@@ -536,6 +574,7 @@ header .icons i:hover{
 .popular-brands-content .card{
 	width: 300px;
 	margin: 1rem;
+	
 }
 .popular-brands-content img{
 	width: 100%;
@@ -620,6 +659,30 @@ header .icons i:hover{
 	font-weight: bold;
 	font-size: 1.5rem;
 }
+/* ----------- Add styles for out-of-stock products ------------ */
+.box.out-of-stock {
+    filter: blur(1px);
+}
+.out-of-stock-message {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgb(15, 14, 14);
+    color: #fff;
+    padding: 10px;
+    border-radius: 5px;
+    text-align: center;
+    font-weight: bold;
+    z-index: 100;
+}
+.box.out-of-stock .icon button {
+    pointer-events: none;
+    opacity: 0.5; 
+    cursor: not-allowed;
+}
+
+/*---------  search and filter --------------------------------------*/ 
 .search-container {
     display: flex;
     align-items: center;
@@ -639,11 +702,39 @@ header .icons i:hover{
 .search-container button {
     flex-shrink: 0; 
 	flex: 0;
-    margin-right: 5px;
+    margin-right: 10px;
+	color: #000;
 	background-color:gainsboro;
 }
 .search-container button:hover{
 	background-color: #f7b90f;
+	color: #fff;
+}
+/*---------  filter order --------------------------------------*/ 
+.filter-container{
+	width: 70%;
+	display: flex;
+    align-items: center;
+}
+.filter-container form {
+    display: flex;
+    flex: 1;
+}
+.filter-container select {
+    flex: 1;
+	margin-left: 60%;
+    margin-right: 5px; 
+}
+.filter-container button{
+	flex-shrink: 0; 
+	flex: 0;
+    margin-right: 5px;
+	color: #000;
+	background-color:gainsboro;
+}
+.filter-container button:hover{
+	background-color: #f7b90f;
+	color: #fff;
 }
 
 /*------------------- home shop ends here -------------------------*/

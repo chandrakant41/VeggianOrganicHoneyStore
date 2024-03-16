@@ -13,11 +13,13 @@
         header('location:login.php');
     }
     
-    // adding product in wishlist
+   
     if (isset($_POST['add_to_wishlist'])) {
         $user_id = $_POST['user_id'];
         $product_id = $_POST['product_id'];
+        $product_brand_name = $_POST['brand_name'];
         $product_name = $_POST['product_name'];
+        $product_net_weight = $_POST['net_weight'];
         $product_price = $_POST['product_price'];
         $product_image = $_POST['image'];
         
@@ -28,15 +30,17 @@
             $message[] = 'product already exist in wishlist';
         
         }else {
-            mysqli_query($conn, "INSERT INTO `wishlist`(`user_id`,`pid`,`name`,`price`,`image`) VALUES('$user_id','$product_id','$product_name','$product_price','$product_image')");
+            mysqli_query($conn, "INSERT INTO `wishlist`(`user_id`,`pid`,`brand_name`,`name`,`net_weight`,`price`,`image`) VALUES('$user_id','$product_id','$product_brand_name','$product_name','$product_net_weight','$product_price','$product_image')");
             $message[] = 'product successfuly added in your wishlist';
         }
     }
 
-     // adding product in cart
+    
      if (isset($_POST['add_to_cart'])) {
         $product_id = $_POST['product_id'];
+        $product_brand_name = $_POST['product_brand_name'];
         $product_name = $_POST['product_name'];
+        $product_net_weight = $_POST['product_net_weight'];
         $product_price = $_POST['product_price'];
         $product_image = $_POST['product_image'];
         $product_quantity = 1;
@@ -45,11 +49,11 @@
         if (mysqli_num_rows($cart_number)>0) {
             $message[] = 'product already exist in cart';
         }else {
-            mysqli_query($conn, "INSERT INTO `cart`(`user_id`,`pid`,`name`,`price`,`quantity`,`image`) VALUES('$user_id','$product_id','$product_name','$product_price','$product_quantity','$product_image')");
+            mysqli_query($conn, "INSERT INTO `cart`(`user_id`,`pid`,`brand_name`,`name`,`net_weight`,`price`,`quantity`,`image`) VALUES('$user_id','$product_id','$product_brand_name','$product_name','$product_net_weight','$product_price','$product_quantity','$product_image')");
             $message[] = 'product successfuly added in your cart';
         }
     }
-    //delete product from wishlist
+   
     if (isset($_GET['delete'])) {
         $delete_id = $_GET['delete'];
         
@@ -57,7 +61,7 @@
     
         header('location:wishlist.php');
        }
-    //delete all product from wishlist
+    
     if (isset($_GET['delete_all'])) {
         
         mysqli_query($conn, "DELETE FROM `wishlist` WHERE user_id = '$user_id'") or die('query failed');
@@ -117,9 +121,13 @@
             <form method="post" class="box">
                  <img src="img/<?php echo $fetch_wishlist['image']; ?>">       
                  <div class="price">Rs<?php echo $fetch_wishlist['price']; ?></div>
+                 <div class="brand_name"><h4><?php echo $fetch_wishlist['brand_name']; ?></h4></div>
                  <div class="name"><?php echo $fetch_wishlist['name']; ?></div>
+                 <div class="net_weight"><?php echo $fetch_wishlist['net_weight']; ?>g</div>
                  <input type="hidden" name="product_id" value="<?php echo $fetch_wishlist['id']; ?>">
+                 <input type="hidden" name="product_brand_name" value="<?php echo $fetch_wishlist['brand_name'];?>">
                  <input type="hidden" name="product_name" value="<?php echo $fetch_wishlist['name']; ?>">
+                 <input type="hidden" name="product_net_weight" value="<?php echo $fetch_wishlist['net_weight'];?>">
                  <input type="hidden" name="product_price" value="<?php echo $fetch_wishlist['price']; ?>">
                  <input type="hidden" name="product_image" value="<?php echo $fetch_wishlist['image']; ?>">
                  <div class="icon">

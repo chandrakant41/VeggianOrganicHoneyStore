@@ -64,7 +64,7 @@
     		<h1>login now</h1>
             <div class="input-field">
                 <lable>Enter your email</lable><br>
-                <input type="email" name="email" placeholder="enter your email" autocomplete="off" required>
+                <input type="email" name="email" placeholder="enter your email"  required>
             </div>
             <div class="input-field">
                 <lable>Enter your password</lable><br>

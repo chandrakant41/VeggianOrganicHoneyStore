@@ -14,7 +14,7 @@
     }
     
     
-     // updating qty from cart
+    
      if (isset($_POST['update_qty_btn'])) {
         $update_qty_id = $_POST['update_qty_id'];
         $update_qty = $_POST['update_qty'];
@@ -25,7 +25,7 @@
         }
      }
      
-    //delete product from cart
+  
     if (isset($_GET['delete'])) {
         $delete_id = $_GET['delete'];
         
@@ -33,7 +33,7 @@
     
         header('location:cart.php');
        }
-    //delete product from cart
+    
     if (isset($_GET['delete_all'])) {
         
         mysqli_query($conn, "DELETE FROM `cart`") or die('query failed');
@@ -100,7 +100,9 @@
                  </div>
                  <img src="img/<?php echo $fetch_cart['image']; ?>">       
                  <div class="price">Rs<?php echo $fetch_cart['price']; ?></div>
+                 <div class="brand_name"><h4><?php echo $fetch_cart['brand_name']; ?></h4></div>
                  <div class="name"><?php echo $fetch_cart['name']; ?></div>
+                 <div class="net_weight"><p><?php echo $fetch_cart['net_weight']; ?>g</p></div>
                 <form method="post">
                         <input type="hidden" name="update_qty_id" value="<?php echo $fetch_cart['id']; ?>">
                         <div class="qty">
