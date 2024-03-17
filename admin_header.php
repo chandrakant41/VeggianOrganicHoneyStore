@@ -37,6 +37,6 @@
             <p>Manage your hive of information with ease. From tracking sales and inventory to nurturing customer relationships, let's get buzzing !.</p>
         </div>
     </div> 
-    <div class="line"></div>
+    <div class="line2"></div>
 </body>
 </html>
