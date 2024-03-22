@@ -52,7 +52,7 @@ if (isset($_GET['filter'])) {
             $filterCondition = "WHERE STR_TO_DATE(placed_on, '%d-%b-%Y') < '2023-01-01'";
             break;
         case 'pending':
-            $filterCondition = "WHERE payment_status = 'pendings'";
+            $filterCondition = "WHERE payment_status = 'pending'";
             break;
         case 'complete':
             $filterCondition = "WHERE payment_status = 'completes'";
@@ -72,12 +72,14 @@ $select_orders = mysqli_query($conn, $sql);
 if (!$select_orders) {
     die(mysqli_error($conn)); 
 }
+
 ?>
+
 <!-- ------------------------------------------------------------------------------- -->
 <style type="text/css">
     <?php include 'style.css'; ?>
 </style>
-
+<!-- ------------------------------------------------------------------------------- -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -119,6 +121,7 @@ if (!$select_orders) {
 <div class="line2"></div>
     <section class="order-container">
         <h1 class="title">Total Orders Placed</h1>
+        
         <div class="box-container">
             <?php 
             if (mysqli_num_rows($select_orders) > 0) {
@@ -141,19 +144,26 @@ if (!$select_orders) {
                         <option value="pendings">Pending</option>
                         <option value="completes">Complete</option>
                     </select>
+                
                     <input type="submit" name="update_order" value="Update Order" class="btn">
                     <a href="admin_order.php?delete=<?php echo $fetch_orders['id']; ?>" onclick="return confirm('Delete this message');" class="delete">Delete</a>
+                    
                 </form>
+                 
             </div>
             <?php 
                 }
+            
             } else {
                 echo '<div class="empty"><p>No orders placed yet!</p></div>';
             }
             ?>
         </div>
+        
     </section>
     <div class="line"></div>
+    
+
     <script type="text/javascript" src="script.js"></script>
 </body>
 </html>

@@ -12,6 +12,58 @@
         session_destroy();
         header('location:login.php');
     }
+
+// Function to generate PDF report for a product
+function generateProductReport($productDetails)
+{
+    require('fpdf186/fpdf.php');
+
+    $pdf = new FPDF();
+    $pdf->AddPage();
+    $pdf->SetFont('Arial', 'B', 16);
+    $pdf->SetTextColor(0, 0, 0);
+
+    // Set header background color
+    $pdf->SetFillColor(150, 150, 255); // Light blue color for the header background
+
+    // Add header with store name, date, and time
+    $pdf->Cell(0, 10, 'Veggian Organic Honey Store', 0, 1, 'C', true); // Use true to fill the cell with the background color
+    $pdf->SetFont('Arial', '', 12); // Set font size for date and time
+    $pdf->Cell(0, 10, 'Date: ' . date('Y-m-d'), 0, 1, 'R');
+    $pdf->Cell(0, 10, 'Time: ' . date('H:i:s'), 0, 1, 'R');
+    $pdf->Ln(10);
+
+    // Add "Product Inventory" line with bold text
+    $pdf->SetFont('Arial', 'B', 14);
+    $pdf->Cell(0, 10, 'Product Inventory', 0, 1, 'C'); // Bold text for the heading
+    $pdf->Ln(5); // Add some space after the heading
+
+    // Set font and cell fill color for the table headers
+    $pdf->SetFont('Arial', 'B', 14);
+    $pdf->SetFillColor(200, 200, 200); // Light gray color for the table headers
+
+    // Table headers
+    $pdf->Cell(50, 10, 'Field', 1, 0, 'C', true);
+    $pdf->Cell(140, 10, 'Product Details', 1, 1, 'C', true);
+
+    // Set font for table content
+    $pdf->SetFont('Arial', '', 12);
+
+    // Iterate through product details
+    foreach ($productDetails as $field => $value) {
+        // Exclude the image field from being added to the PDF
+        if ($field !== 'image') {
+            $pdf->Cell(50, 10, $field, 1, 0, 'L');
+            $pdf->Cell(140, 10, $value, 1, 1, 'L');
+        }
+    }
+
+    // Output file name
+    $pdfFileName = 'product_details_' . $productDetails['id'] . '.pdf';
+    $pdf->Output('F', $pdfFileName);
+
+    return $pdfFileName;
+}
     //adding products to database
     if (isset($_POST['add_product'])) {
         $product_brand_name = mysqli_real_escape_string($conn, $_POST['brand_name']);
@@ -43,8 +95,27 @@
                     $message[]='product added successfully';
                 }
             }
+        // Product details for generating PDF
+    $productDetails = [
+       
+        'brand_name' => $product_brand_name,
+        'name' => $product_name,
+        'price' => $product_price,
+        'net_weight' => $product_net_weight,
+        'stock' => $product_stock
+    ];
+
+    // Generate PDF report for the added product
+    $pdfFileName = generateProductReport($productDetails);
+
+    // Force download the PDF file
+    header('Content-Type: application/pdf');
+    header('Content-Disposition: attachment; filename="' . basename($pdfFileName) . '"');
+    readfile($pdfFileName);
+    exit;
         }
     }
+
  
    if (isset($_GET['delete'])) {
     $delete_id = $_GET['delete'];
@@ -105,6 +176,7 @@ function hideUpdateForm() {
         include 'style.css'
     ?>
 </style>
+<!-- --------------------------------------------------------------------------------- -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -114,6 +186,12 @@ function hideUpdateForm() {
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <link rel="stylesheet" type="text/css" href="style.css">
     <title>admin pannel</title>
+    <style>
+        /* Add custom CSS for adjusting font size */
+        .date-time {
+            font-size: 12px;
+        }
+    </style>
 </head>
 <body>
     <?php include 'admin_header.php';?>
@@ -179,6 +257,7 @@ function hideUpdateForm() {
                 <h4><?php echo $fetch_products['brand_name']; ?></h4>
                 <h4><?php echo $fetch_products['name']; ?></h4>
                 <p>Net Weight : <?php echo $fetch_products['net_weight']; ?>g</p>
+                <p>stock : <?php echo $fetch_products['stock']; ?></p>
                 <details><?php echo $fetch_products['product_details']; ?></details>
                 <a href="admin_product.php?edit=<?php echo $fetch_products['id']; ?>" class="edit">edit</a>
                 <a href="admin_product.php?delete=<?php echo $fetch_products['id']; ?>" class="delete" onclick="return confirm('want to delete this product');">delete</a>

@@ -41,10 +41,33 @@ function generateOrderReport($orderDetails)
         $pdf->Cell(140, 10, $value, 1, 1, 'L');
     }
 
-    $pdfFileName = 'order_details_' . $orderDetails['Order ID'] . '.pdf';
-    $pdf->Output($pdfFileName, 'F');
+    $pdfFileName = 'order_statistics.pdf'; // Change file name to order_statistics.pdf
+    $pdf->Output('F', $pdfFileName);
 
-    return $pdfFileName;
+    // Close the PDF object
+    $pdf->Close();
+
+    // Explicitly close the output buffer
+    ob_end_flush();
+
+    // Send the file to the browser
+    header('Content-Disposition: attachment; filename="' . $pdfFileName . '"');
+    readfile($pdfFileName);
+    exit();
+}
+
+// Handle report generation
+if (isset($_POST['generate_report']) && isset($_POST['order_id'])) {
+    $orderId = $_POST['order_id'];
+    $sql = "SELECT * FROM `order` WHERE id='$orderId'";
+    $result = mysqli_query($conn, $sql);
+    
+    if ($result && mysqli_num_rows($result) > 0) {
+        $orderDetails = mysqli_fetch_assoc($result);
+        generateOrderReport($orderDetails);
+    } else {
+        echo "Order not found.";
+    }
 }
 
 // Handle filter selection

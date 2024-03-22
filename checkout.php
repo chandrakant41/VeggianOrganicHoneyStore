@@ -143,6 +143,12 @@ if ($mail->send()) {
             while ($fetch_cart = mysqli_fetch_assoc($select_cart)) {
                 $total_price = ($fetch_cart['price'] * $fetch_cart['quantity']);
                 $grand_total = $total += $total_price;
+
+                 // Update the stock quantity in the products table
+                $product_id = $fetch_cart['pid']; // Assuming product_id is the primary key in your products table
+                $quantity_ordered = $fetch_cart['quantity'];
+                $update_stock_query = "UPDATE products SET stock = stock - $quantity_ordered WHERE id = $product_id";
+                mysqli_query($conn, $update_stock_query);
             ?>
         <div class="box">
     <img src="img/<?php echo $fetch_cart['image']; ?>">

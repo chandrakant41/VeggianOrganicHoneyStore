@@ -495,7 +495,34 @@ header .icons i:hover{
     border-radius: 5px;
 }
 
-
+/*---------  filter order --------------------------------------*/ 
+.filter-container{
+	width: 80%;
+	display: flex;
+    align-items: center;
+	text-align: center;
+}
+.filter-container form {
+    display: flex;
+    flex: 1;
+}
+.filter-container select {
+    flex: 1;
+	margin-left: 40%;
+    margin-right: 5px; 
+	
+}
+.filter-container button{
+	flex-shrink: 0; 
+	flex: 0;
+    margin-right: 5px;
+	color: #000;
+	background-color:gainsboro;
+}
+.filter-container button:hover{
+	background-color: #f7b90f;
+	color: #fff;
+}
 /*-----------media screen-------------*/
 @media (max-width: 991px){
 	#menu-btn{

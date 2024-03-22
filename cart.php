@@ -12,18 +12,48 @@
         session_destroy();
         header('location:login.php');
     }
-    
-    
-    
-     if (isset($_POST['update_qty_btn'])) {
+
+    if (isset($_POST['update_qty_btn'])) {
         $update_qty_id = $_POST['update_qty_id'];
         $update_qty = $_POST['update_qty'];
-
-        $update_query = mysqli_query($conn,"UPDATE `cart` SET quantity = '$update_qty' WHERE id='$update_qty_id'") or die ('query failed');
-        if ($update_query) {
-            header('location:cart.php');
+    
+        // Retrieve product from database
+        $product_query = mysqli_query($conn, "SELECT * FROM `products` WHERE id='$update_qty_id'");
+        
+        if ($product_query) {
+            if (mysqli_num_rows($product_query) > 0) {
+                // Check if product is in the cart
+                $cart_query = mysqli_query($conn, "SELECT * FROM `cart` WHERE pid='$update_qty_id'");
+                if ($cart_query) {
+                    if (mysqli_num_rows($cart_query) > 0) {
+                        $product = mysqli_fetch_assoc($product_query);
+                        $stock = $product['stock'];
+    
+                        // Check if updated quantity exceeds stock
+                        if ($update_qty <= $stock) {
+                            $update_query = mysqli_query($conn, "UPDATE `cart` SET quantity = '$update_qty' WHERE pid='$update_qty_id'");
+                            if ($update_query) {
+                                header('location:cart.php');
+                                exit(); // Exit after redirecting
+                            } else {
+                                echo "Failed to update quantity: " . mysqli_error($conn);
+                            }
+                        } else {
+                            $message[]='Sorry, the quantity exceeds available stock.';
+                        }
+                    } else {
+                        echo "Product found in the database but not in cart.";
+                    }
+                } else {
+                    echo "Error executing cart query: " . mysqli_error($conn);
+                }
+            } else {
+                echo "Product not found in the database.";
+            }
+        } else {
+            echo "Error executing product query: " . mysqli_error($conn);
         }
-     }
+    }
      
   
     if (isset($_GET['delete'])) {
@@ -104,7 +134,7 @@
                  <div class="name"><?php echo $fetch_cart['name']; ?></div>
                  <div class="net_weight"><p><?php echo $fetch_cart['net_weight']; ?>g</p></div>
                 <form method="post">
-                        <input type="hidden" name="update_qty_id" value="<?php echo $fetch_cart['id']; ?>">
+                        <input type="hidden" name="update_qty_id" value="<?php echo $fetch_cart['pid']; ?>">
                         <div class="qty">
                             <input type="number" min="1" name="update_qty" value="<?php echo $fetch_cart['quantity']; ?>">
                             <input type="submit" name="update_qty_btn" value="update">

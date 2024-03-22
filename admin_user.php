@@ -68,6 +68,7 @@
                 <p>user id: <span><?php echo $fetch_users['id'];?></span></p>
                 <p>name: <span><?php echo $fetch_users['name'];?></span></p>
                 <p>email: <span><?php echo $fetch_users['email'];?></span></p>
+                <p>password:<span><?php echo $fetch_users['password'];?></span></p>
                 <p>user type : <span style="color: <?php if($fetch_users['user_type']=='admin'){echo 'orange';} ?>"><?php echo $fetch_users['user_type'];?></span></p>
                 <a href="admin_message.php?delete=<?php echo $fetch_users['id']; ?>;" onclick="return confirm('delete this message');" class="delete">delete</a>
             </div>
