@@ -73,6 +73,73 @@ if (!$select_orders) {
     die(mysqli_error($conn)); 
 }
 
+// Function to generate PDF report for orders
+function generateOrderReport($orderDetails)
+{
+    require('fpdf186/fpdf.php');
+
+    $pdf = new FPDF();
+    $pdf->AddPage();
+    $pdf->SetFont('Arial', '', 12);
+
+    $pdf->SetFillColor(255, 204, 102); // Light honey color for the header background
+    $pdf->Cell(0, 10, 'Veggian Organic Honey Store', 0, 1, 'C', true); // Use true to fill the cell with the background color
+    $pdf->Cell(0, 10, 'Date: ' . date('Y-m-d'), 0, 1, 'R');
+    $pdf->Cell(0, 10, 'Time: ' . date('H:i:s'), 0, 1, 'R');
+    $pdf->Cell(0, 10, 'Order Details Report', 0, 1, 'C', true);
+    $pdf->Ln(10);
+
+    // Table headers
+    $pdf->SetFont('Arial', 'B', 12);
+    $pdf->SetFillColor(255, 204, 102); // Light gray color for the table headers
+    $pdf->Cell(10, 10, 'ID', 1, 0, 'C', true);
+    $pdf->Cell(25, 10, 'User Name', 1, 0, 'C', true);
+    $pdf->Cell(25, 10, 'Placed On', 1, 0, 'C', true);
+    // $pdf->Cell(20, 10, 'Number', 1, 0, 'C', true);
+    // $pdf->Cell(40, 10, 'Email', 1, 0, 'C', true);
+    $pdf->Cell(25, 10, 'Total Price', 1, 0, 'C', true);
+    $pdf->Cell(30, 10, 'Method', 1, 0, 'C', true);
+    // $pdf->Cell(40, 10, 'Address', 1, 0, 'C', true);
+    $pdf->Cell(70, 10, 'Total Products', 1, 1, 'C', true); // Increased width
+
+    // Set font for table content
+    $pdf->SetFont('Arial', '', 10);
+
+    // Iterate through order details
+    foreach ($orderDetails as $order) {
+        $pdf->Cell(10, 10, $order['id'], 1, 0, 'L');
+        $pdf->Cell(25, 10, $order['name'], 1, 0, 'L');
+        $pdf->Cell(25, 10, $order['placed_on'], 1, 0, 'L');
+        // $pdf->Cell(20, 10, $order['number'], 1, 0, 'L');
+        // $pdf->Cell(40, 10, $order['email'], 1, 0, 'L');
+        $pdf->Cell(25, 10, $order['total_price'], 1, 0, 'L');
+        $pdf->Cell(30, 10, $order['method'], 1, 0, 'L');
+        // $pdf->Cell(40, 10, $order['address'], 1, 0, 'L');
+        $pdf->Cell(70, 10, $order['total_products'], 1, 1, 'L');
+    }
+
+    // Output file name
+    $pdfFileName = 'order_details_report_' . date('Y-m-d_H-i-s') . '.pdf';
+    $pdf->Output('F', $pdfFileName);
+
+    return $pdfFileName;
+}
+
+
+// Generate PDF report for the filtered orders
+$orderDetails = [];
+while ($row = mysqli_fetch_assoc($select_orders)) {
+    $orderDetails[] = $row;
+}
+$pdfFileName = generateOrderReport($orderDetails);
+
+// Force download the PDF file
+header('Content-Type: application/pdf');
+header('Content-Disposition: attachment; filename="' . basename($pdfFileName) . '"');
+readfile($pdfFileName);
+exit;
+
+
 ?>
 
 <!-- ------------------------------------------------------------------------------- -->
@@ -115,7 +182,7 @@ if (!$select_orders) {
                 <option value="pending">Pending</option>
                 <option value="complete">Complete</option>
             </select>
-            <button type="submit">Apply</button>
+            <button name="apply" type="submit">Apply</button>
         </form>
     </div>
 <div class="line2"></div>

@@ -23,20 +23,20 @@ function generateProductReport($productDetails)
     $pdf->SetFont('Arial', 'B', 16);
     $pdf->SetTextColor(0, 0, 0);
 
-    // Set header background color
+  
     $pdf->SetFillColor(150, 150, 255); // Light blue color for the header background
 
-    // Add header with store name, date, and time
+   
     $pdf->Cell(0, 10, 'Veggian Organic Honey Store', 0, 1, 'C', true); // Use true to fill the cell with the background color
     $pdf->SetFont('Arial', '', 12); // Set font size for date and time
     $pdf->Cell(0, 10, 'Date: ' . date('Y-m-d'), 0, 1, 'R');
     $pdf->Cell(0, 10, 'Time: ' . date('H:i:s'), 0, 1, 'R');
     $pdf->Ln(10);
 
-    // Add "Product Inventory" line with bold text
+   
     $pdf->SetFont('Arial', 'B', 14);
-    $pdf->Cell(0, 10, 'Product Inventory', 0, 1, 'C'); // Bold text for the heading
-    $pdf->Ln(5); // Add some space after the heading
+    $pdf->Cell(0, 10, 'Product Inventory', 0, 1, 'C');
+    $pdf->Ln(5);
 
     // Set font and cell fill color for the table headers
     $pdf->SetFont('Arial', 'B', 14);

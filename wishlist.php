@@ -127,10 +127,10 @@
             ?>
             <form method="post" class="box">
                  <img src="img/<?php echo $fetch_wishlist['image']; ?>">       
-                 <div class="price">Rs<?php echo $fetch_wishlist['price']; ?></div>
                  <div class="brand_name"><h4><?php echo $fetch_wishlist['brand_name']; ?></h4></div>
                  <div class="name"><?php echo $fetch_wishlist['name']; ?></div>
                  <div class="net_weight"><?php echo $fetch_wishlist['net_weight']; ?>g</div>
+                 <div class="price">Rs<?php echo $fetch_wishlist['price']; ?></div>
                  <input type="hidden" name="product_id" value="<?php echo $fetch_wishlist['pid']; ?>">
                  <input type="hidden" name="product_brand_name" value="<?php echo $fetch_wishlist['brand_name'];?>">
                  <input type="hidden" name="product_name" value="<?php echo $fetch_wishlist['name']; ?>">
