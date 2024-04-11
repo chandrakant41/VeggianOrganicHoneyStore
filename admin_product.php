@@ -13,6 +13,8 @@
         header('location:login.php');
     }
 
+// Set timezone to Indian Standard Time
+    date_default_timezone_set('Asia/Kolkata');
 // Function to generate PDF report for a product
 function generateProductReport($productDetails)
 {
@@ -33,14 +35,15 @@ function generateProductReport($productDetails)
     $pdf->Cell(0, 10, 'Time: ' . date('H:i:s'), 0, 1, 'R');
     $pdf->Ln(10);
 
-   
     $pdf->SetFont('Arial', 'B', 14);
-    $pdf->Cell(0, 10, 'Product Inventory', 0, 1, 'C');
+    $pdf->SetFillColor(255, 204, 102);
+
+    $pdf->Cell(0, 10, 'Product Inventory', 0, 1, 'C', true);
     $pdf->Ln(5);
 
     // Set font and cell fill color for the table headers
     $pdf->SetFont('Arial', 'B', 14);
-    $pdf->SetFillColor(200, 200, 200); // Light gray color for the table headers
+    $pdf->SetFillColor(255, 204, 102); // honey color for the table headers
 
     // Table headers
     $pdf->Cell(50, 10, 'Field', 1, 0, 'C', true);

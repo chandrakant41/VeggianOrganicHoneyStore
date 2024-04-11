@@ -14,6 +14,9 @@ if (isset($_POST['logout'])) {
     exit(); // Make sure to exit after redirecting
 }
 
+// Set timezone to Indian Standard Time
+date_default_timezone_set('Asia/Kolkata');
+
 // Function to generate PDF report
 function generateOrderReport($orderDetails)
 {
@@ -22,17 +25,19 @@ function generateOrderReport($orderDetails)
     $pdf = new FPDF();
     $pdf->AddPage();
     $pdf->SetFont('Arial', 'B', 16);
-    $pdf->SetTextColor(0, 0, 0);
-
-    $pdf->Cell(0, 10, 'Veggian Organic Honey', 0, 1, 'C');
-    $pdf->Cell(0, 10, 'Order Details', 0, 1, 'C');
+   // $pdf->SetTextColor(0, 0, 0);
+    $pdf->SetFillColor(255, 204, 102); // Light honey color for the header background
+    $pdf->Cell(0, 10, 'Veggian Organic Honey', 0, 1, 'C', true);
+    $pdf->Cell(0, 10, 'Date: ' . date('Y-m-d'), 0, 1, 'R');
+    $pdf->Cell(0, 10, 'Time: ' . date('H:i:s'), 0, 1, 'R');
+    $pdf->Cell(0, 10, 'Bill Invoice', 0, 1, 'C', true);
     $pdf->Ln(10);
 
     $pdf->SetFont('Arial', 'B', 14);
-    $pdf->SetFillColor(200, 200, 200);
+    $pdf->SetFillColor(138, 43, 226 );
 
     $pdf->Cell(50, 10, 'Field', 1, 0, 'C', true);
-    $pdf->Cell(140, 10, 'Value', 1, 1, 'C', true);
+    $pdf->Cell(140, 10, 'Order Details', 1, 1, 'C', true);
 
     $pdf->SetFont('Arial', '', 12);
 
@@ -41,7 +46,7 @@ function generateOrderReport($orderDetails)
         $pdf->Cell(140, 10, $value, 1, 1, 'L');
     }
 
-    $pdfFileName = 'order_statistics.pdf'; // Change file name to order_statistics.pdf
+    $pdfFileName = 'bill_invoice.pdf'; // Change file name to order_statistics.pdf
     $pdf->Output('F', $pdfFileName);
 
     // Close the PDF object
@@ -59,7 +64,7 @@ function generateOrderReport($orderDetails)
 // Handle report generation
 if (isset($_POST['generate_report']) && isset($_POST['order_id'])) {
     $orderId = $_POST['order_id'];
-    $sql = "SELECT * FROM `order` WHERE id='$orderId'";
+    $sql = "SELECT `name`, `number`, `email`, `method`, `address`, `total_products`, `total_price`, `placed_on`, `payment_status` FROM `order` WHERE id='$orderId'";
     $result = mysqli_query($conn, $sql);
     
     if ($result && mysqli_num_rows($result) > 0) {

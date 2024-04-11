@@ -21,7 +21,7 @@ if (isset($_GET['delete'])) {
     mysqli_query($conn, "DELETE FROM `order` WHERE id ='$delete_id'") or die('query failed');
     $message[] = 'Order removed';
     header('location:admin_order.php');
-    exit; // 
+    exit; 
 }
 
 if (isset($_POST['update_payment'])) {
@@ -55,7 +55,7 @@ if (isset($_GET['filter'])) {
             $filterCondition = "WHERE payment_status = 'pending'";
             break;
         case 'complete':
-            $filterCondition = "WHERE payment_status = 'completes'";
+            $filterCondition = "WHERE payment_status = 'complete'";
             break;    
         default:
             $filterCondition = '';
@@ -65,7 +65,6 @@ if (isset($_GET['filter'])) {
 
 $sql = "SELECT * FROM `order` $filterCondition";
 
-
 // Execute the SQL query
 $select_orders = mysqli_query($conn, $sql);
 
@@ -73,7 +72,10 @@ if (!$select_orders) {
     die(mysqli_error($conn)); 
 }
 
+// Set timezone to Indian Standard Time
+    date_default_timezone_set('Asia/Kolkata');
 // Function to generate PDF report for orders
+
 function generateOrderReport($orderDetails)
 {
     require('fpdf186/fpdf.php');
@@ -95,11 +97,8 @@ function generateOrderReport($orderDetails)
     $pdf->Cell(10, 10, 'ID', 1, 0, 'C', true);
     $pdf->Cell(25, 10, 'User Name', 1, 0, 'C', true);
     $pdf->Cell(25, 10, 'Placed On', 1, 0, 'C', true);
-    // $pdf->Cell(20, 10, 'Number', 1, 0, 'C', true);
-    // $pdf->Cell(40, 10, 'Email', 1, 0, 'C', true);
     $pdf->Cell(25, 10, 'Total Price', 1, 0, 'C', true);
     $pdf->Cell(30, 10, 'Method', 1, 0, 'C', true);
-    // $pdf->Cell(40, 10, 'Address', 1, 0, 'C', true);
     $pdf->Cell(70, 10, 'Total Products', 1, 1, 'C', true); // Increased width
 
     // Set font for table content
@@ -110,11 +109,8 @@ function generateOrderReport($orderDetails)
         $pdf->Cell(10, 10, $order['id'], 1, 0, 'L');
         $pdf->Cell(25, 10, $order['name'], 1, 0, 'L');
         $pdf->Cell(25, 10, $order['placed_on'], 1, 0, 'L');
-        // $pdf->Cell(20, 10, $order['number'], 1, 0, 'L');
-        // $pdf->Cell(40, 10, $order['email'], 1, 0, 'L');
         $pdf->Cell(25, 10, $order['total_price'], 1, 0, 'L');
         $pdf->Cell(30, 10, $order['method'], 1, 0, 'L');
-        // $pdf->Cell(40, 10, $order['address'], 1, 0, 'L');
         $pdf->Cell(70, 10, $order['total_products'], 1, 1, 'L');
     }
 
@@ -126,19 +122,23 @@ function generateOrderReport($orderDetails)
 }
 
 
-// Generate PDF report for the filtered orders
-$orderDetails = [];
-while ($row = mysqli_fetch_assoc($select_orders)) {
-    $orderDetails[] = $row;
+// Check if any report generation parameters are set
+$generateReport = isset($_GET['apply']);
+
+if ($generateReport) {
+    // Generate PDF report for the filtered orders
+    $orderDetails = [];
+    while ($row = mysqli_fetch_assoc($select_orders)) {
+        $orderDetails[] = $row;
+    }
+    $pdfFileName = generateOrderReport($orderDetails);
+
+    // Force download the PDF file
+    header('Content-Type: application/pdf');
+    header('Content-Disposition: attachment; filename="' . basename($pdfFileName) . '"');
+    readfile($pdfFileName);
+    exit;
 }
-$pdfFileName = generateOrderReport($orderDetails);
-
-// Force download the PDF file
-header('Content-Type: application/pdf');
-header('Content-Disposition: attachment; filename="' . basename($pdfFileName) . '"');
-readfile($pdfFileName);
-exit;
-
 
 ?>
 
